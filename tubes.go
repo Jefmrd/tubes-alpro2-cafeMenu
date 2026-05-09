@@ -1,5 +1,8 @@
 package main
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 const NMAX int = 999
 type dataMenu [NMAX] menu
 type menu struct {
@@ -12,25 +15,18 @@ type menu struct {
 func main(){
 	var listMenu dataMenu
 	var menuUtama, menuAksi int
-	var jumlahMenu int
-	listMenu = dataMenu{
-		{nama: "Nasi_Goreng", 
-		harga: 15000, 
-		komposisi: "Nasi, Telur, Kecap",
-		kategori: "makanan utama",
-		},
-		{nama:      "Matcha_Latte",
-        harga:     18000,
-        komposisi: "Bubuk Matcha, Susu Segar",
-        kategori:  "minuman",
-		},
-		{nama:      "Kentang_Goreng",
-        harga:     12000,
-        komposisi: "Kentang, Garam, Kaldu",
-        kategori:  "makanan ringan",
-		},
+	var jumlahMenu, nAwal int
+	var nomor int
+	var menuTambahan int
+	//membaca data awal
+	f, _ := os.Open("data.txt")
+	//memproses data awal
+	fmt.Fscan(f, &nAwal)
+	for i:=0;i<nAwal;i++ {
+		fmt.Fscan(f, &listMenu[i].nama, &listMenu[i].harga, &listMenu[i].komposisi, &listMenu[i].kategori)
 	}
 	
+	//memulai program
 	menuUtama = 1
 	fmt.Println("Selamat datang diCafe-menu (^o^)")
 	for menuUtama == 1 {
@@ -47,6 +43,8 @@ func main(){
 		}else if menuAksi == 2 {
 			fmt.Println("Masukkan jumlah menu yang ingin ditambahkan")
 			fmt.Scan(&jumlahMenu)
+			//menghitung jumlah menu yang ditambahkan
+			menuTambahan = menuTambahan + jumlahMenu
 			fmt.Println("Masukkan menu yang ingin anda tambahkan (tanpa spasi atau gunakan _ )")
 			fmt.Println("*Note: Kategori diisi dengan coffe atau noncoffe")
 			for i:=1; i<=jumlahMenu;i++{
@@ -55,7 +53,14 @@ func main(){
 			tampilMenu(listMenu)
 		}else if menuAksi == 3 {
 			fmt.Println("Pilih menu nomor berapa yang ingin anda ubah")
-			
+			fmt.Scan(&nomor)
+			//mengecek apakah ada menu pada nomor tersebut
+			if nomor <= 0 || nomor > nAwal+menuTambahan {
+				fmt.Println("Menu tidak tersedia")
+			}else {
+				ubahMenu(nomor-1, &listMenu)
+			}
+			tampilMenu(listMenu)
 		}else if menuAksi == 4 {
 			fmt.Println("Pilih menu yang ingin anda hilangkan")
 			tampilMenu(listMenu)
@@ -75,7 +80,6 @@ func main(){
 }
 
 func tampilMenu(listMenu dataMenu){
-	
 	i:=0
 	fmt.Println("------------------------------------------------------------------------------------------------")
 	fmt.Printf("| %-3s | %-20s | %-12s | %-30s | %-15s |\n", "No", "Nama Menu", "Harga","Komposisi", "Kategori")
@@ -112,6 +116,34 @@ func tambahMenu (listMenu*dataMenu){
 		}
 		i++
 	}	
+}
+
+func ubahMenu(idx int, listMenu*dataMenu){
+	var komponenMenu string
+	var namaBaru, komposisiBaru, kategoriBaru string
+	var hargaBaru int
+	fmt.Print("Komponen yang ingin anda ubah: ")
+	fmt.Scan(&komponenMenu)
+	if komponenMenu == "nama" {
+		fmt.Println("Masukkan nama baru: ")
+		fmt.Scan(&namaBaru)
+		listMenu[idx].nama = namaBaru
+	}else if komponenMenu == "harga" {
+		fmt.Print("Masukkan harga baru: Rp")
+		fmt.Scan(&hargaBaru)
+		listMenu[idx].harga = hargaBaru
+	}else if komponenMenu == "komposisi" {
+		fmt.Print("Masukkan komposisi yang baru: ")
+		fmt.Scan(&komposisiBaru)
+		listMenu[idx].komposisi = komposisiBaru
+	}else if komponenMenu == "kategori" {
+		fmt.Print("Masukkan kategori yang baru: ")
+		fmt.Scan(&kategoriBaru)
+		listMenu[idx].kategori = kategoriBaru
+	}else {
+		fmt.Print("Mohon masukkan komponen yang ada dan benar")
+	}
+	
 }
 
 func hapusMenu(listMenu*dataMenu){
