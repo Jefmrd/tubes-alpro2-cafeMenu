@@ -14,10 +14,9 @@ type menu struct {
 
 func main(){
 	var listMenu dataMenu
-	var menuUtama, menuAksi int
-	var jumlahMenu, nAwal int
-	var nomor int
-	var menuTambahan int
+	var nAwal int
+	var posisi int
+	
 	//membaca data awal
 	f, _ := os.Open("data.txt")
 	//memproses data awal
@@ -27,56 +26,92 @@ func main(){
 	}
 	
 	//memulai program
-	menuUtama = 1
 	fmt.Println("Selamat datang diCafe-menu (^o^)")
-	for menuUtama == 1 {
-		//memilih aksi
-		fmt.Println("Silahkan pilih angka untuk melakukan aksi yang tersedia")
-		fmt.Println("1.Menampilkan menu")
-		fmt.Println("2.Menambahkan menu")
-		fmt.Println("3.Mengubah menu")
-		fmt.Println("4.Mengurangi menu")
-		fmt.Scan(&menuAksi)
-		if menuAksi == 1 {
-			fmt.Println("Menampilkan menu yang tersedia")
-			tampilMenu(listMenu)
-		}else if menuAksi == 2 {
-			fmt.Println("Masukkan jumlah menu yang ingin ditambahkan")
-			fmt.Scan(&jumlahMenu)
-			//menghitung jumlah menu yang ditambahkan
-			menuTambahan = menuTambahan + jumlahMenu
-			fmt.Println("Masukkan menu yang ingin anda tambahkan (tanpa spasi atau gunakan _ )")
-			fmt.Println("*Note: Kategori diisi dengan coffe atau noncoffe")
-			for i:=1; i<=jumlahMenu;i++{
-				tambahMenu(&listMenu)
-			}
-			tampilMenu(listMenu)
-		}else if menuAksi == 3 {
-			fmt.Println("Pilih menu nomor berapa yang ingin anda ubah")
-			fmt.Scan(&nomor)
-			//mengecek apakah ada menu pada nomor tersebut
-			if nomor <= 0 || nomor > nAwal+menuTambahan {
-				fmt.Println("Menu tidak tersedia")
-			}else {
-				ubahMenu(nomor-1, &listMenu)
-			}
-			tampilMenu(listMenu)
-		}else if menuAksi == 4 {
-			fmt.Println("Pilih menu yang ingin anda hilangkan")
-			tampilMenu(listMenu)
-			hapusMenu(&listMenu)
-		}else {
-			fmt.Println("Aksi tidak tersedia (!_!)")
-		}
-		
-		
-		//Penutup
-		fmt.Println("Ada lagi yang ingin anda lakukan?")
-		fmt.Println("1.Kembali menu utama")
-		fmt.Println("2.Mengakhiri program")
-		fmt.Scan(&menuUtama)
+	fmt.Println("Silahkan pilih posisi anda")
+	fmt.Println("1.Admin")
+	fmt.Println("2.Pelanggan")
+	fmt.Scan(&posisi)
+	if posisi == 1 {
+		menuAdmin(nAwal,&listMenu)
+	}else if posisi == 2 {
+		menuPelanggan(nAwal, listMenu)
+	}else {
+		fmt.Println("Posisi tidak tersedia")
 	}
+	
 	fmt.Println("Sampai jumpa (^_^)")
+}
+
+func menuAdmin(nAwal int, listMenu*dataMenu){
+	var menuUtama, menuAksi int
+	var jumlahMenu, menuTambahan int
+	var nomor int
+	
+	menuUtama = 1
+	for menuUtama == 1 {
+			//memilih aksi
+			fmt.Println("Silahkan pilih angka untuk melakukan aksi yang tersedia")
+			fmt.Println("1.Menampilkan menu")
+			fmt.Println("2.Menambahkan menu")
+			fmt.Println("3.Mengubah menu")
+			fmt.Println("4.Mengurangi menu")
+			fmt.Scan(&menuAksi)
+			if menuAksi == 1 {
+				fmt.Println("Menampilkan menu yang tersedia")
+				tampilMenu(*listMenu)
+			}else if menuAksi == 2 {
+				fmt.Println("Masukkan jumlah menu yang ingin ditambahkan")
+				fmt.Scan(&jumlahMenu)
+				//menghitung jumlah menu yang ditambahkan
+				menuTambahan = menuTambahan + jumlahMenu
+				fmt.Println("Masukkan menu yang ingin anda tambahkan (tanpa spasi atau gunakan _ )")
+				fmt.Println("*Note: Kategori diisi dengan coffe atau noncoffe")
+				for i:=1; i<=jumlahMenu;i++{
+					tambahMenu(listMenu)
+				}
+				tampilMenu(*listMenu)
+			}else if menuAksi == 3 {
+				fmt.Println("Pilih menu nomor berapa yang ingin anda ubah")
+				fmt.Scan(&nomor)
+				//mengecek apakah ada menu pada nomor tersebut
+				if nomor <= 0 || nomor > nAwal+menuTambahan {
+					fmt.Println("Menu tidak tersedia")
+				}else {
+					ubahMenu(nomor-1, listMenu)
+				}
+				tampilMenu(*listMenu)
+			}else if menuAksi == 4 {
+				fmt.Println("Pilih menu yang ingin anda hilangkan")
+				tampilMenu(*listMenu)
+				hapusMenu(listMenu)
+			}else {
+				fmt.Println("Aksi tidak tersedia (!_!)")
+			}
+			
+			//Penutup
+			fmt.Println("Ada lagi yang ingin anda lakukan?")
+			fmt.Println("1.Kembali menu utama")
+			fmt.Println("2.Mengakhiri program")
+			fmt.Scan(&menuUtama)
+		}
+}
+
+func menuPelanggan(nAwal int,listMenu dataMenu){
+	var menuAksi int
+
+	fmt.Println("Menampilkan menu yang tersedia")
+	tampilMenu(listMenu)
+	fmt.Println("Silahkan pilih angka untuk melakukan aksi yang tersedia")
+	fmt.Println("1.Mengurutkan menu")
+	fmt.Println("2.Mencari menu")
+	fmt.Scan(&menuAksi)
+	if menuAksi == 1 {
+		
+	}else if menuAksi == 2 {
+		
+	}else {
+		fmt.Println("Menu tidak tersedia")
+	}
 }
 
 func tampilMenu(listMenu dataMenu){
