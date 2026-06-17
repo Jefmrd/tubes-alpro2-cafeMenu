@@ -382,60 +382,54 @@ func statistikMenu(nAwal *int, listMenu *dataMenu) {
 	var jumlahPerKategori [NMAX]int
 	var jumlahKategoriUnik int = 0 
 	
-	// Pengecekan jika data menu masih kosong
+	// Pengecekan jika data menu masih kosong menggunakan struktur if-else
 	if *nAwal == 0 {
 		fmt.Println("Belum ada menu yang terdaftar untuk dihitung statistiknya.")
-		return
-	}
+	} else {
+		totalHarga := 0
 
-	totalHarga := 0
+		// Membaca setiap menu satu per satu
+		for i := 0; i < *nAwal; i++ {
+			kategori := listMenu[i].kategori
+			harga := listMenu[i].harga
 
-	// Membaca setiap menu satu per satu
-	for i := 0; i < *nAwal; i++ {
-		kategori := listMenu[i].kategori
-		harga := listMenu[i].harga
+			totalHarga += harga
 
-		totalHarga += harga
+			// Cek apakah kategori dari menu saat ini sudah pernah dicatat
+			ditemukan := false
+			
+			// Loop berjalan selama j belum habis DAN belum ditemukan
+			for j := 0; j < jumlahKategoriUnik && !ditemukan; j++ {
+				if daftarKategori[j] == kategori {
+					// Jika kategori sudah ada, cukup tambahkan jumlahnya
+					jumlahPerKategori[j]++ 
+					ditemukan = true // Mengubah ke true untuk menghentikan loop j di iterasi berikutnya
+				}
+			}
 
-		// Cek apakah kategori dari menu saat ini sudah pernah dicatat
-		ditemukan := false
-		for j := 0; j < jumlahKategoriUnik; j++ {
-			if daftarKategori[j] == kategori {
-				// Jika kategori sudah ada, cukup tambahkan jumlahnya
-				jumlahPerKategori[j]++ 
-				ditemukan = true
-				break
+			// Jika kategori belum pernah dicatat, tambahkan sebagai kategori baru
+			if !ditemukan && kategori != "" {
+				daftarKategori[jumlahKategoriUnik] = kategori
+				jumlahPerKategori[jumlahKategoriUnik] = 1
+				jumlahKategoriUnik++ // Tambah total kategori unik yang ditemukan
 			}
 		}
 
-		// Jika kategori belum pernah dicatat, tambahkan sebagai kategori baru
-		if !ditemukan && kategori != "" {
-			daftarKategori[jumlahKategoriUnik] = kategori
-			jumlahPerKategori[jumlahKategoriUnik] = 1
-			jumlahKategoriUnik++ // Tambah total kategori unik yang ditemukan
+		// Menghitung rata-rata harga
+		rataRataHarga := float64(totalHarga) / float64(*nAwal)
+
+		// Menampilkan hasil statistik
+		fmt.Println("\n========================================")
+		fmt.Println("             STATISTIK MENU             ")
+		fmt.Println("========================================")
+		fmt.Printf("Total Menu        : %d\n", *nAwal)
+		
+		fmt.Println("\nJumlah Menu per Kategori:")
+		for i := 0; i < jumlahKategoriUnik; i++ {
+			fmt.Printf("- %-15s : %d menu\n", daftarKategori[i], jumlahPerKategori[i])
 		}
+		
+		fmt.Printf("\nRata-rata Harga   : Rp%.2f\n", rataRataHarga)
+		fmt.Println("========================================")
 	}
-
-	// Menghitung rata-rata harga
-	rataRataHarga := float64(totalHarga) / float64(*nAwal)
-
-	// Menampilkan hasil statistik
-	fmt.Println("\n========================================")
-	fmt.Println("             STATISTIK MENU             ")
-	fmt.Println("========================================")
-	fmt.Printf("Total Menu        : %d\n", *nAwal)
-	
-	fmt.Println("\nJumlah Menu per Kategori:")
-	for i := 0; i < jumlahKategoriUnik; i++ {
-		fmt.Printf("- %-15s : %d menu\n", daftarKategori[i], jumlahPerKategori[i])
-	}
-	
-	fmt.Printf("\nRata-rata Harga   : Rp%.2f\n", rataRataHarga)
-	fmt.Println("========================================")
-}
-
-
-
-func clearScreen() {
-	fmt.Print("\033[H\033[2J")
-}
+}         
