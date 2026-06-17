@@ -1,6 +1,6 @@
 5
-Espresso 15000 Biji_Kopi coffe
-Cappuccino 25000 Espresso,Susu,Busa_Susu coffe
-Americano 18000 Espresso,Air_Panas coffe
-Red_Velvet 22000 Bubuk_Red_Velvet,Susu_Segar noncoffe
-Taro_Latte 21000 Bubuk_Taro,Susu_UHT noncoffe
+Espresso 15000 Biji_Kopi coffe Tersedia
+Cappuccino 25000 Espresso,Susu,Busa_Susu coffe Tersedia
+Americano 18000 Espresso,Air_Panas coffe Tersedia
+Red_Velvet 22000 Bubuk_Red_Velvet,Susu_Segar noncoffe Tersedia
+Taro_Latte 21000 Bubuk_Taro,Susu_UHT noncoffe Tersedia
